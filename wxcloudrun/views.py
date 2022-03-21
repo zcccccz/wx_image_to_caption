@@ -5,6 +5,9 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from wxcloudrun.models import Counters
 
+import requests
+
+from skimage import io
 
 logger = logging.getLogger('log')
 
@@ -27,14 +30,36 @@ def zcztest(request, _):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     fID = body['fID']
-    img = body['img']
+    url = 'https://api.weixin.qq.com/tcb/batchdownloadfile'
+    env = 'prod-1gxq0vrt5f11b56e'
+    file_list = [
+        {
+        "fileid":fID,
+        "max_age":7200,
+        }
+    ]
+    data = json.dumps({
+        'env':env,
+        'file_list':file_list,
+    })
+    headers = {'Content-Type': 'application/json'}
+    r = requests.post(url, data=data, headers=headers)
+    image_url = r.json()['file_list'][0]['download_url']
+    
+    image = io.imread(image_url)
+    image_shape = str(image.shape)
 
 
     rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
     if request.method == 'GET' or request.method == 'get':
         rsp = get_count()
     elif request.method == 'POST' or request.method == 'post':
-        rsp = JsonResponse({'code': 0, "data": 'FengFu success!', 'fID':fID, 'img':img},
+        rsp = JsonResponse({
+            'code': 0,
+            "data": 'FengFu success!',
+            'message':'我已经成功获得图片url!',
+            'url':image_url,
+            '图片大小':image_shape},
                     json_dumps_params={'ensure_ascii': False})
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},

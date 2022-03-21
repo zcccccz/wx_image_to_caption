@@ -23,4 +23,7 @@ urlpatterns = (
 
     # 获取主页
     url(r'(/)?$', views.index),
+
+    # 测试
+    url(r'^^api/zcztest(/)?$', views.zcztest),
 )

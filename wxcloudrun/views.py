@@ -18,6 +18,26 @@ def index(request, _):
 
     return render(request, 'index.html')
 
+def zcztest(request, _):
+    """
+    获取当前计数
+
+     `` request `` 请求对象
+    """
+
+    rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
+    if request.method == 'GET' or request.method == 'get':
+        rsp = get_count()
+    elif request.method == 'POST' or request.method == 'post':
+        rsp = JsonResponse({'code': 0, "data": 'FengFu success!'},
+                    json_dumps_params={'ensure_ascii': False})
+    else:
+        rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
+                            json_dumps_params={'ensure_ascii': False})
+    logger.info('response result: {}'.format(rsp.content.decode('utf-8')))
+    return rsp
+
+
 
 def counter(request, _):
     """

@@ -24,12 +24,17 @@ def zcztest(request, _):
 
      `` request `` 请求对象
     """
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    fID = body['fID']
+    img = body['img']
+
 
     rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
     if request.method == 'GET' or request.method == 'get':
         rsp = get_count()
     elif request.method == 'POST' or request.method == 'post':
-        rsp = JsonResponse({'code': 0, "data": 'FengFu success!'},
+        rsp = JsonResponse({'code': 0, "data": 'FengFu success!', 'fID':fID, 'img':img},
                     json_dumps_params={'ensure_ascii': False})
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},

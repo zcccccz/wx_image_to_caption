@@ -43,7 +43,7 @@ def zcztest(request, _):
         'file_list':file_list,
     })
     headers = {'Content-Type': 'application/json'}
-    r = requests.post(url, data=data, headers=headers)
+    r = requests.post(url, data=data, headers=headers,verify=False)
     image_url = r.json()['file_list'][0]['download_url']
     
     # image = io.imread(image_url)

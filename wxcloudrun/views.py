@@ -7,7 +7,7 @@ from wxcloudrun.models import Counters
 
 import requests
 
-# from skimage import io
+from skimage import io
 
 logger = logging.getLogger('log')
 
@@ -46,8 +46,8 @@ def zcztest(request, _):
     r = requests.post(url, data=data, headers=headers,verify=False)
     image_url = r.json()['file_list'][0]['download_url']
     
-    # image = io.imread(image_url)
-    # image_shape = str(image.shape)
+    image = io.imread(image_url)
+    image_shape = str(image.shape)
 
 
     rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
@@ -59,6 +59,7 @@ def zcztest(request, _):
             "data": 'FengFu success!',
             'message':'我已经成功获得图片url!',
             'url':image_url,
+            'shape':image_shape,
             },
                     json_dumps_params={'ensure_ascii': False})
     else:

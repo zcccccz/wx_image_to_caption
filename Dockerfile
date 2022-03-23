@@ -22,6 +22,12 @@ RUN pip config set global.index-url http://pypi.doubanio.com/simple \
 && pip install en_core_web_sm-3.2.0.tar.gz \
 && pip install -U cos-python-sdk-v5
 
+WORKDIR /app/bottom-up-attention.pytorch/detectron2
+RUN pip install -e .
+WORKDIR /app/bottom-up-attention.pytorch
+RUN python setup.py build develop
+WORKDIR /app
+
 # 设定对外端口
 EXPOSE 80
 

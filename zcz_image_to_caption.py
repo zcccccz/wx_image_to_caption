@@ -1,15 +1,26 @@
-import pickle
-import torch
+import sys
+sys.path.append('bottom-up-attention.pytorch/utils')
+sys.path.append('bottom-up-attention.pytorch')
+sys.path.append('bottom-up-attention.pytorch/detectron2')
 from detectron2.checkpoint import DetectionCheckpointer
 from detectron2.config import get_cfg
 from detectron2.engine import DefaultTrainer
-from bottom_up_attention.utils.extract_utils import get_image_blob
-from bottom_up_attention.bua.caffe.modeling.layers.nms import nms
-from bottom_up_attention.bua.d2 import add_attribute_config
-import sys
+from extract_utils import get_image_blob
+from bua.caffe import add_bottom_up_attention_config
+from bua.caffe.modeling.layers.nms import nms
+from bua.d2 import add_attribute_config
+sys.path.pop()
+sys.path.pop()
+sys.path.pop()
+# sys.path.append('meshed_memory_transformer')
 sys.path.insert(0,'meshed_memory_transformer')
 from data import TextField
 from models.transformer import Transformer, MemoryAugmentedEncoder, MeshedDecoder, ScaledDotProductAttentionMemory
+
+
+import pickle
+import torch
+
 
 # 从数据库读取模型
 from qcloud_cos import CosConfig
@@ -38,21 +49,22 @@ response['Body'].get_stream_to_file('meshed_memory_transformer/meshed_memory_tra
 
 
 
-config_file = 'bottom_up_attention/configs/d2/test-d2-r101.yaml'
+config_file = 'bottom-up-attention.pytorch/configs/d2/test-d2-r101.yaml'
 mode = "d2"
 cfg = get_cfg()
 cfg.defrost()
 add_attribute_config(cfg)
 cfg.merge_from_file(config_file)
 cfg.merge_from_list(['MODEL.BUA.EXTRACT_FEATS',True])
+cfg.MODEL.DEVICE = 'cpu'
 cfg.freeze()
 
 MIN_BOXES = 10
-MAX_BOXES = 20
+MAX_BOXES = 40
 CONF_THRESH = 0.4
 model1 = DefaultTrainer.build_model(cfg)
 DetectionCheckpointer(model1, save_dir=cfg.OUTPUT_DIR).resume_or_load(
-    'bottom_up_attention/'+cfg.MODEL.WEIGHTS, resume=True
+    'bottom-up-attention.pytorch/'+cfg.MODEL.WEIGHTS, resume=True
 )
 model1.eval()
 
@@ -119,7 +131,7 @@ def image_to_caption(image):
     features = features.unsqueeze(0)
 
     features = features.to(device)
-    out, _ = model2.beam_search(features, 20, text_field.vocab.stoi['<eos>'], 5, out_size=1)
+    out, _ = model2.beam_search(features, 30, text_field.vocab.stoi['<eos>'], 5, out_size=1)
     caps_gen = text_field.decode(out, join_words=False)
 
     res = []

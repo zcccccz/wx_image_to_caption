@@ -18,7 +18,9 @@ RUN pip config set global.index-url http://pypi.doubanio.com/simple \
 && pip install --upgrade pip \
 && pip install --no-cache-dir -r requirements.txt \
 && pip install opencv-python-headless \
-&& pip3 install torch==1.11.0+cpu torchvision==0.12.0+cpu torchaudio==0.11.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html \
+# && pip3 install torch==1.11.0+cpu torchvision==0.12.0+cpu torchaudio==0.11.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html \
+# && pip3 install torch==1.11.0 \
+&& pip install torch torchvision -i https://pypi.mirrors.ustc.edu.cn/simple/ \
 && pip install en_core_web_sm-3.2.0.tar.gz \
 && pip install -U cos-python-sdk-v5
 

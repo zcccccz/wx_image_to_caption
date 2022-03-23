@@ -16,7 +16,11 @@ WORKDIR /app
 RUN pip config set global.index-url http://pypi.doubanio.com/simple \
 && pip config set global.trusted-host pypi.doubanio.com \
 && pip install --upgrade pip \
-&& pip install --no-cache-dir -r requirements.txt
+&& pip install --no-cache-dir -r requirements.txt \
+&& pip install opencv-python-headless \
+&& pip3 install torch==1.11.0+cpu torchvision==0.12.0+cpu torchaudio==0.11.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html \
+&& pip install en_core_web_sm-3.2.0.tar.gz \
+&& pip install -U cos-python-sdk-v5
 
 # 设定对外端口
 EXPOSE 80

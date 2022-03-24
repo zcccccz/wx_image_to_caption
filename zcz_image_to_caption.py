@@ -22,33 +22,6 @@ import pickle
 import torch
 
 
-# 从数据库读取模型
-from qcloud_cos import CosConfig
-from qcloud_cos import CosS3Client
-import sys
-import logging
-logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-
-secret_id = 'AKID86oGSwA7oENFqBG4cttcASTDgS1JL6bp' 
-secret_key = 'yf6HCpCIAm9F6h4C3e18yYruiIdkcFcj'   
-region = 'ap-shanghai'      
-token = None               
-scheme = 'https'
-config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
-client = CosS3Client(config)
-response = client.get_object(
-    Bucket='7072-prod-1gxq0vrt5f11b56e-1310101813',
-    Key='cloud://prod-1gxq0vrt5f11b56e.7072-prod-1gxq0vrt5f11b56e-1310101813/models/bua-d2-frcn-r101.pth'
-)
-response['Body'].get_stream_to_file('bottom_up_attention/bua-d2-frcn-r101.pth')
-response = client.get_object(
-    Bucket='7072-prod-1gxq0vrt5f11b56e-1310101813',
-    Key='cloud://prod-1gxq0vrt5f11b56e.7072-prod-1gxq0vrt5f11b56e-1310101813/models/meshed_memory_transformer.pth'
-)
-response['Body'].get_stream_to_file('meshed_memory_transformer/meshed_memory_transformer.pth')
-
-
-
 config_file = 'bottom-up-attention.pytorch/configs/d2/test-d2-r101.yaml'
 mode = "d2"
 cfg = get_cfg()

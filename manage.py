@@ -18,5 +18,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # import zcz_download_model
     main()

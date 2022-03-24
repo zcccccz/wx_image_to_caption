@@ -3,9 +3,7 @@ import logging
 from django.http import JsonResponse
 from django.shortcuts import render
 import requests
-from skimage import io
 
-# import zcz_image_to_caption
 
 logger = logging.getLogger('log')
 
@@ -45,10 +43,17 @@ def zcztest(request, _):
     requests.packages.urllib3.disable_warnings()
     r = requests.post(url, data=data, headers=headers,verify=False)
     image_url = r.json()['file_list'][0]['download_url']
-    
-    image = io.imread(image_url)
-    image_shape = str(image.shape)
-    # caption = zcz_image_to_caption.image_to_caption(image)
+
+    ali_url = 'http://106.15.238.138/api/zczrequest'
+    image_link = image_url
+    data = json.dumps({
+        'image_link':image_link
+    })
+    headers = {'Content-Type': 'application/json'}
+    requests.packages.urllib3.disable_warnings()
+    r = requests.post(ali_url, data=data, headers=headers,verify=False)
+    caption = r.json()['caption']
+    caption = caption.capitalize()
 
 
     rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
@@ -58,12 +63,9 @@ def zcztest(request, _):
         rsp = JsonResponse({
             'code': 0,
             "data": 'FengFu success!',
-            'message':'我已经成功获得图片url!',
-            'url':image_url,
-            'shape':image_shape,
-            # 'caption':caption,
+            'caption':caption,
             },
-                    json_dumps_params={'ensure_ascii': False})
+            json_dumps_params={'ensure_ascii': False})
     else:
         rsp = JsonResponse({'code': -1, 'errorMsg': '请求方式错误'},
                             json_dumps_params={'ensure_ascii': False})

@@ -5,7 +5,7 @@ from django.shortcuts import render
 import requests
 from skimage import io
 
-import zcz_image_to_caption
+# import zcz_image_to_caption
 
 logger = logging.getLogger('log')
 
@@ -48,7 +48,7 @@ def zcztest(request, _):
     
     image = io.imread(image_url)
     image_shape = str(image.shape)
-    caption = zcz_image_to_caption.image_to_caption(image)
+    # caption = zcz_image_to_caption.image_to_caption(image)
 
 
     rsp = JsonResponse({'code': 0, 'errorMsg': ''}, json_dumps_params={'ensure_ascii': False})
@@ -61,7 +61,7 @@ def zcztest(request, _):
             'message':'我已经成功获得图片url!',
             'url':image_url,
             'shape':image_shape,
-            'caption':caption,
+            # 'caption':caption,
             },
                     json_dumps_params={'ensure_ascii': False})
     else:

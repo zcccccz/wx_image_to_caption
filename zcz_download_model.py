@@ -7,8 +7,8 @@ import requests
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 r = requests.get('http://api.weixin.qq.com/_/cos/getauth')
 secret_id = r.json()["TmpSecretId"]
-secret_key = r.json()["TmpSecretKey"]   
-region = 'ap-shanghai'      
+secret_key = r.json()["TmpSecretKey"]
+region = 'ap-shanghai'
 token = r.json()["Token"]
 scheme = 'https'
 config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)

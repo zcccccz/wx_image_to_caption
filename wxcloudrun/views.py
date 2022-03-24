@@ -5,7 +5,6 @@ from django.shortcuts import render
 import requests
 from skimage import io
 
-import zcz_download_model
 import zcz_image_to_caption
 
 logger = logging.getLogger('log')

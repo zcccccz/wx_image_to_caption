@@ -19,16 +19,11 @@ def index(request, _):
 
 
 def zcztest(request, _):
-    """
-    获取当前计数
-
-     `` request `` 请求对象
-    """
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     fID = body['fID']
     url = 'https://api.weixin.qq.com/tcb/batchdownloadfile'
-    env = 'prod-1gxq0vrt5f11b56e'
+    env = 'prod-7go2gw3039d3620b'
     file_list = [
         {
         "fileid":fID,
@@ -44,7 +39,7 @@ def zcztest(request, _):
     r = requests.post(url, data=data, headers=headers,verify=False)
     image_url = r.json()['file_list'][0]['download_url']
 
-    ali_url = 'http://106.15.238.138/api/zczrequest'
+    ali_url = 'http://47.111.95.214/api/zczrequest'
     image_link = image_url
     data = json.dumps({
         'image_link':image_link
